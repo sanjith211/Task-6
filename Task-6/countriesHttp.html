@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <script>
+    var http = new XMLHttpRequest();
+    http.open('GET', "https://restcountries.com/v3.1/all");
+    http.send();
+    http.onload = () => {
+      if (http.status == 200) {
+        // console.log(http.response);
+        let response = JSON.parse(http.response);
+        // console.log(response);
+        var asia = response.filter((country) => {
+          if (country.region == "Asia") {
+            return true;
+          }
+        });
+        console.log("Country : ", asia);
+
+        var population = response.filter((pop) => {
+          if (pop.population < 200000) {
+            return true;
+          }
+        });
+        console.log("Population : ", population);
+
+        response.forEach(country => {
+          console.log('Name :', country.name.official);
+          console.log('Capital :', country.capital);
+          console.log('Flag:', country.flag);
+        });
+
+        var red = response.reduce((accumulator, total) => {
+          return accumulator + total.population;
+        }, 0);
+        console.log("Total Population : ", red);
+
+        var currency = response.filter((money) => {
+          // if (money.currencies.USD.name == "United States dollar") {
+          if (money.currencies && money.currencies.USD) {
+            return true;
+          }
+        });
+        console.log("Currencies : ", currency);
+      } else {
+        console.log("Error");
+      }
+    };
+  </script>
+</body>
+
+</html>
